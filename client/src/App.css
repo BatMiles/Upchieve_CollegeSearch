@@ -15,6 +15,7 @@
 .App-table {
   width: 100%;
   padding: 40px;
+  text-align: left;
 }
 
 .App-table-header {
@@ -51,15 +52,8 @@
 }
 
 .sort-button-container {
-  margin: 20px 0;
-}
-
-.sort-button {
-  color: #47ccde;
-  cursor: pointer;
-  margin-right: 20px;
-}
-
-.sort-button:hover {
-  text-decoration: underline;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: powderblue;
 }

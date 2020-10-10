@@ -14,4 +14,5 @@
 ## Areas for improvement
 These are things I would have included with more time/resources.
 1. Better styling using SASS
+2. Refactoring server middleware into own folder/files
 

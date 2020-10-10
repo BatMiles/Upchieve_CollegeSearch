@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import '../App.css';
 
-import SchoolItem from "./SchoolItem.js";
 import SchoolsTable from "./SchoolsTable.js";
+import Controls from "./Controls.js";
 
 import ReactPaginate from "react-paginate";
 
@@ -26,6 +26,10 @@ class App extends Component {
 
         this.handleSortClick = this
             .handleSortClick
+            .bind(this);
+
+        this.handleStateChange = this
+            .handleStateChange
             .bind(this);
     }
 
@@ -66,27 +70,32 @@ class App extends Component {
         );
     }
 
+    handleStateChange = (e) => {
+        const key = e.target.name;
+        const value = e.target.value;
+
+        this.setState({
+            sort: {
+                ...this.state.sort,
+                [key]: value
+            }
+        }, () => {
+            this.callAPI(this.state.metadata.page)
+        });
+    }
+
     componentDidMount() {
         const initialPage = 0;
         this.callAPI(initialPage);
     }
 
-    listItem(schoolObject) {
-        return (
-            <tr key={schoolObject.id}>
-                <th>{schoolObject["school.name"]}</th>
-                <th>{schoolObject["latest.student.size"]}</th>
-                <th>{schoolObject["latest.admissions.admission_rate.overall"]}</th>
-            </tr>
-        )
-    }
-
     render() {
         let schools = this.state.schools;
-        let data = schools.map((item) => this.listItem(item));
+        const sortProps = this.state.sort;
 
         const numberOfPages = Math.floor(this.state.metadata.total / this.state.metadata.per_page);
         const shouldShowPagination = this.state.metadata.total > this.state.metadata.per_page;
+        const shouldShowTable = this.state.schools.length > 0;
 
         return (
             <div className="App">
@@ -94,24 +103,14 @@ class App extends Component {
                     <h1 className="App-title">College Search</h1>
                 </header>
 
-                <div className="sort-button-container">
-                    <a className="sort-button" value="school.name" onClick={this.handleSortClick}>Sort by name</a>
-                    <a className="sort-button" value="latest.student.size" onClick={this.handleSortClick}>Sort by student size</a>
-                </div>
+                <Controls handleSortClick={this.handleSortClick} sortValues={sortProps} onChange={this.handleStateChange} />
 
-                <table className="App-table">
-                    <thead className="App-table-header">
-                        <tr>
-                            <th>School Name</th>
-                            <th>Student Size</th>
-                            <th>Admissions Rate</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {data}
-                    </tbody>
-                </table>
+                {shouldShowTable ? 
+                    <SchoolsTable 
+                        schools={schools}
+                    />
+                    : <p>No results exist for that query</p>
+                }
 
                 {shouldShowPagination ? 
                     <ReactPaginate
