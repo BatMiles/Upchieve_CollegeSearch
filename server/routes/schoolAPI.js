@@ -2,7 +2,11 @@ let express = require("express");
 var got = require("got");
 let router = express.Router();
 
-router.get("/:page", async function(req, res, next) {
+function containsData(object) {
+	return Object.keys(object).length > 0;
+}
+
+router.post("/:page", async function(req, res, next) {
     try {
     	const api_root = "https://api.data.gov/ed/collegescorecard/v1/schools";
     	const api_key = "ms2nkkFXSyOmc8JPWhiiNUCnu24mvVrqDdALFD8X";
@@ -11,8 +15,13 @@ router.get("/:page", async function(req, res, next) {
     	const page = req.params.page;
     	const state = "NY";
     	const program = "latest.academics.program.bachelors.education";
+    	let sort = "";
 
-    	const url = api_root + "?school.state=" + state + "&" + program + "=1&_fields=" + fields + "&page=" + page + "&api_key=" + api_key;
+    	if (containsData(req.body)) {
+    		sort = `${req.body.field}:${req.body.direction}`
+    	}
+
+    	const url = api_root + "?school.state=" + state + "&" + program + "=1&_fields=" + fields + "&sort=" + sort + "&page=" + page + "&api_key=" + api_key;
         let data = await got(url);
         res.json(data.body);
     } catch(e) {

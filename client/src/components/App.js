@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import '../App.css';
 
+import SchoolItem from "./SchoolItem.js";
+import SchoolsTable from "./SchoolsTable.js";
+
 import ReactPaginate from "react-paginate";
 
 class App extends Component {
@@ -9,16 +12,28 @@ class App extends Component {
         
         this.state = { 
             metadata: {},
-            schools: []  
+            schools: [],
+            sort: {}  
         };
 
         this.handlePageClick = this
             .handlePageClick
             .bind(this);
+
+        this.handleSortClick = this
+            .handleSortClick
+            .bind(this);
     }
 
     async callAPI(page) {
-        const api_call = await fetch("http://localhost:9000/schools/"+page);
+        const api_call = await fetch("http://localhost:9000/schools/"+page, {
+            method: 'POST',
+            body: JSON.stringify(this.state.sort),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
         const data = await api_call.json();
         const jsondata = JSON.parse(data);
 
@@ -29,6 +44,21 @@ class App extends Component {
     handlePageClick = (e) => {
         const selectedPage = e.selected;
         this.callAPI(selectedPage);
+    }
+
+    handleSortClick = (e) => {
+        const value = e.target.attributes.value.value;
+
+        this.setState(
+            {
+                sort: {
+                    field: value,
+                    direction: "desc"
+                }
+            }, () => {
+                this.callAPI(this.state.metadata.page)
+            }
+        );
     }
 
     componentDidMount() {
@@ -58,6 +88,11 @@ class App extends Component {
                 <header className="App-header">
                     <h1 className="App-title">College Search</h1>
                 </header>
+
+                <div className="sort-button-container">
+                    <a className="sort-button" value="school.name" onClick={this.handleSortClick}>Sort by name</a>
+                    <a className="sort-button" value="latest.student.size" onClick={this.handleSortClick}>Sort by student size</a>
+                </div>
 
                 <table className="App-table">
                     <thead className="App-table-header">
