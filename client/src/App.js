@@ -25,14 +25,41 @@ class App extends Component {
     this.callAPI(initialPage);
   }
 
+  listItem(schoolObject) {
+      return (
+          <tr key={schoolObject.id}>
+              <th>{schoolObject["school.name"]}</th>
+              <th>{schoolObject["latest.student.size"]}</th>
+              <th>{schoolObject["latest.admissions.admission_rate.overall"]}</th>
+          </tr>
+      )
+  }
+
   render() {
+    let schools = this.state.schools;
+    let data = schools.map((item) => this.listItem(item));
+    
     return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          {this.state.metadata.page}
-        </p>
-      </header>
+      <div className="App">
+                <header className="App-header">
+                    <h1 className="App-title">College Search</h1>
+                </header>
+
+                <table className="App-table">
+                    <thead className="App-table-header">
+                        <tr>
+                            <th>School Name</th>
+                            <th>Student Size</th>
+                            <th>Admissions Rate</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {data}
+                    </tbody>
+                </table>
+            </div>
     </div>
   );
   }
