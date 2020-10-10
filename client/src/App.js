@@ -1,39 +1,37 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { apiResponse: "" };
+    this.state = { 
+      metadata: {},
+      schools: []  
+    };
   }
 
-  callAPI() {
-    fetch("http://localhost:9000/schools")
-        .then(res => res.text())
-        .then(res => this.setState({ apiResponse: res }));
-  }
+  async callAPI(page) {
+        const api_call = await fetch("http://localhost:9000/schools/"+page);
+        const data = await api_call.json();
+        const jsondata = JSON.parse(data);
 
-  componentWillMount() {
-    this.callAPI();
+        this.setState({ schools: jsondata.results });
+        this.setState({ metadata: jsondata.metadata });
+        console.log(this.state);
+    }
+
+  componentDidMount() {
+    const initialPage = 0;
+    this.callAPI(initialPage);
   }
 
   render() {
     return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          {this.state.apiResponse}
+          {this.state.metadata.page}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );
