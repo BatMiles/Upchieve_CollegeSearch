@@ -13,7 +13,11 @@ class App extends Component {
         this.state = { 
             metadata: {},
             schools: [],
-            sort: {}  
+            sort: {
+                state: "NY",
+                field: "school.name",
+                direction: "asc"
+            }  
         };
 
         this.handlePageClick = this
@@ -26,7 +30,7 @@ class App extends Component {
     }
 
     async callAPI(page) {
-        const api_call = await fetch("http://localhost:9000/schools/"+page, {
+        const api_call = await fetch("http://localhost:9000/schools/"+page+"/state/"+this.state.sort.state+"/sort/"+this.state.sort.field+"/order/"+this.state.sort.direction, {
             method: 'POST',
             body: JSON.stringify(this.state.sort),
             headers: {
@@ -52,6 +56,7 @@ class App extends Component {
         this.setState(
             {
                 sort: {
+                    ...this.state.sort,
                     field: value,
                     direction: "desc"
                 }
