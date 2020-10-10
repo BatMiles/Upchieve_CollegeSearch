@@ -50,7 +50,7 @@ router.post("/:page/state/:state/sort/:sort/order/:order", checkCache, async fun
         return res.json(data.body);
     } catch(e) {
         console.log(e);
-          return res.status(500).json(e);
+        return res.status(500).json(e);
     }
 });
 

@@ -1,5 +1,6 @@
 ## Run the server
-1. In terminal, navigate to the `server` directory
+1. In terminal, run `redis-server`
+1. Open a new terminal window, navigate to the `server` directory
 2. Install dependencies with `npm install`
 3. Run with `npm start`
 

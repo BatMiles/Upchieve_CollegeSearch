@@ -18,6 +18,10 @@
   text-align: left;
 }
 
+.App-table tr {
+  margin: 10px 0;
+}
+
 .App-table-header {
   font-size: 20px;
 }
