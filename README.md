@@ -12,8 +12,10 @@
 ## View the app
 1. After running the server and the client, navigate to http://localhost:3000/
 
-## Areas for improvement
-These are things I would have included with more time/resources.
-1. Better styling using SASS
-2. Refactoring server middleware into own folder/files
+## Running route tests
+1. In terminal, navigate to the `server` directory
+2. Run `npm test`
+3. Tests have succeeded if the script DOES NOT terminate
+4. If the script fails, it will terminate with an `ERR! Test failed` message
+
 
