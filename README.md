@@ -11,3 +11,7 @@
 ## View the app
 1. After running the server and the client, navigate to http://localhost:3000/
 
+## Areas for improvement
+These are things I would have included with more time/resources.
+1. Better styling using SASS
+
