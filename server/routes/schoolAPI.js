@@ -1,11 +1,11 @@
-let express = require("express");
-var got = require("got");
+const express = require("express");
+const got = require("got");
 
 const redis = require("redis");
 const port_redis = process.env.PORT || 6379;
 const redis_client = redis.createClient(port_redis);
 
-let router = express.Router();
+const router = express.Router();
 
 // caching middleware
 checkCache = function(req, res, next) {

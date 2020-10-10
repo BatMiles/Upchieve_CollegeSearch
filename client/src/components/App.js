@@ -24,13 +24,14 @@ class App extends Component {
             .handlePageClick
             .bind(this);
 
-        this.handleSortClick = this
-            .handleSortClick
-            .bind(this);
-
         this.handleStateChange = this
             .handleStateChange
             .bind(this);
+    }
+
+    componentDidMount() {
+        const initialPage = 0;
+        this.callAPI(initialPage);
     }
 
     async callAPI(page) {
@@ -54,22 +55,6 @@ class App extends Component {
         this.callAPI(selectedPage);
     }
 
-    handleSortClick = (e) => {
-        const value = e.target.attributes.value.value;
-
-        this.setState(
-            {
-                sort: {
-                    ...this.state.sort,
-                    field: value,
-                    direction: "desc"
-                }
-            }, () => {
-                this.callAPI(this.state.metadata.page)
-            }
-        );
-    }
-
     handleStateChange = (e) => {
         const key = e.target.name;
         const value = e.target.value;
@@ -84,16 +69,11 @@ class App extends Component {
         });
     }
 
-    componentDidMount() {
-        const initialPage = 0;
-        this.callAPI(initialPage);
-    }
-
     render() {
-        let schools = this.state.schools;
+        const schools = this.state.schools;
         const sortProps = this.state.sort;
-
         const numberOfPages = Math.floor(this.state.metadata.total / this.state.metadata.per_page);
+
         const shouldShowPagination = this.state.metadata.total > this.state.metadata.per_page;
         const shouldShowTable = this.state.schools.length > 0;
 
@@ -103,7 +83,7 @@ class App extends Component {
                     <h1 className="App-title">College Search</h1>
                 </header>
 
-                <Controls handleSortClick={this.handleSortClick} sortValues={sortProps} onChange={this.handleStateChange} />
+                <Controls sortValues={sortProps} onChange={this.handleStateChange} />
 
                 {shouldShowTable ? 
                     <SchoolsTable 
@@ -125,7 +105,7 @@ class App extends Component {
                         containerClassName={"pagination"}
                         subContainerClassName={"pages pagination"}
                         activeClassName={"active"}/>
-                     : '' }
+                    : '' }
             </div>
         );
     }
